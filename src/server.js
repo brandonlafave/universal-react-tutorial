@@ -1,21 +1,24 @@
-
 // load the dependencies we need
+import path from 'path';
 import express from 'express';
 import http from 'http';
 
 // defined constants
 const app  = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 const env  = process.env.NODE_ENV || 'production';
 
-// use the public folder to serve static assets
-app.use(express.static('public'));
+// set the path that static assets are served from
+app.use(express.static(path.join(__dirname, 'static')));
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-//
-app.set('*', (req, res) => {
+// set the path for the views directory
+app.set('views', path.join(__dirname, 'views'));
+
+// set default route
+app.get('/', function(req, res) {
 	res.render('index');
 });
 
@@ -26,6 +29,6 @@ app.listen(port, err => {
 		return console.error(err);
 	} else {
   		// logs server information to the console
-  		console.info('Server listening on port + ${port} [${env}]');
+  		console.info(`Server listening on port ${port} [${env}]`);
 	}
 });
